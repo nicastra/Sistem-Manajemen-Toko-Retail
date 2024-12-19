@@ -3,10 +3,12 @@
 #include <string>
 #include <map>
 #include <iomanip>
+#include <algorithm>
 
 
 
 using namespace std;
+
 
 struct Item {
     string code;
@@ -17,6 +19,7 @@ struct Item {
     int stock;
 };
 
+
 enum class PaymentMethod {
     CASH,
     QRIS
@@ -24,39 +27,54 @@ enum class PaymentMethod {
 
 class RetailStore {
 private:
-    vector<Item> items;
-    map<string, int> dailySales; 
-    vector<pair<string, PaymentMethod>> paymentMethods; 
+    Item* items; // Array dinamis dari item
+    int itemCount; // Jumlah item yang ada
+    map<string, int> dailySales; // Untuk melacak penjualan harian per item
+    map<string, PaymentMethod>* paymentMethods; // Menyimpan metode pembayaran per transaksi
+    int paymentMethodCount; // Jumlah transaksi
 
 public:
+    RetailStore() : items(nullptr), itemCount(0), paymentMethods(nullptr), paymentMethodCount(0) {}
+
+    ~RetailStore() {
+        delete[] items;
+        delete[] paymentMethods;
+    }
+
     void addItem() {
-        Item newItem;
+        Item* newItems = new Item[itemCount + 1];
+        for (int i = 0; i < itemCount; ++i) {
+            newItems[i] = items[i];
+        }
+        delete[] items;
+        items = newItems;
+
         cout << "Masukkan kode barang: ";
-        cin >> newItem.code;
+        cin >> items[itemCount].code;
         cout << "Masukkan nama barang: ";
-        cin.ignore(); 
-        getline(cin, newItem.name);
+        cin.ignore(); // Clear the newline character from the buffer
+        getline(cin, items[itemCount].name);
         cout << "Masukkan harga modal: ";
-        cin >> newItem.costPrice;
+        cin >> items[itemCount].costPrice;
         cout << "Masukkan harga jual: ";
-        cin >> newItem.sellPrice;
+        cin >> items[itemCount].sellPrice;
         cout << "Masukkan stok minimal: ";
-        cin >> newItem.minStock;
+        cin >> items[itemCount].minStock;
         cout << "Masukkan stok awal: ";
-        cin >> newItem.stock;
-        items.push_back(newItem);
+        cin >> items[itemCount].stock;
+        itemCount++;
         cout << "Barang berhasil ditambahkan!" << endl;
     }
 
     void viewStock() {
         cout << "--- Semua Barang ---" << endl;
-        for (const auto& item : items) {
-            cout << "Kode: " << item.code << ", Nama: " << item.name << ", Stok: " << item.stock << endl;
+        for (int i = 0; i < itemCount; ++i) {
+            cout << "Kode: " << items[i].code << ", Nama: " << items[i].name << ", Stok: " << items[i].stock << endl;
         }
         cout << "--- Stok Menipis ---" << endl;
-        for (const auto& item : items) {
-            if (item.stock <= item.minStock) {
-                cout << "Kode: " << item.code << ", Nama: " << item.name << ", Stok: " << item.stock << endl;
+        for (int i = 0; i < itemCount; ++i) {
+            if (items[i].stock <= items[i].minStock) {
+                cout << "Kode: " << items[i].code << ", Nama: " << items[i].name << ", Stok: " << items[i].stock << endl;
             }
         }
     }
@@ -65,13 +83,13 @@ public:
         string code;
         cout << "Masukkan kode barang: ";
         cin >> code;
-        for (auto& item : items) {
-            if (item.code == code) {
+        for (int i = 0; i < itemCount; ++i) {
+            if (items[i].code == code) {
                 int increment;
                 cout << "Masukkan jumlah stok masuk: ";
                 cin >> increment;
-                item.stock += increment;
-                cout << "Stok barang " << item.name << " diperbarui menjadi " << item.stock << endl;
+                items[i].stock += increment;
+                cout << "Stok barang " << items[i].name << " diperbarui menjadi " << items[i].stock << endl;
                 return;
             }
         }
@@ -79,12 +97,8 @@ public:
     }
 
 
-    string get_item_name(const string& code) {
-        for (const auto& item : items) {
-            if (item.code == code) return item.name;
-        }
-        return "Tidak Diketahui";
-    }
+
+  
 
    
 
@@ -96,7 +110,6 @@ public:
                  << "1. Input Barang\n"
                  << "2. Lihat Stok\n"
                  << "3. Update Stok\n"
-             
                  << "4. Kembali\n"
                  << "Pilih: ";
             cin >> choice;
@@ -104,15 +117,13 @@ public:
                 case 1: addItem(); break;
                 case 2: viewStock(); break;
                 case 3: updateStock(); break;
-          
                 case 4: break;
                 default: cout << "Pilihan tidak valid." << endl;
             }
         } while (choice != 7);
     }
 
-    
-   
+  
 };
 
 int main() {
