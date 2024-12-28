@@ -1,5 +1,12 @@
 ### Sistem Manajemen Toko Retail
 
+Kelompok 14 Algorithma Dasar
+
+- sandi setiawan - 24130300005
+- widianto - 24120500028
+- Muhamad Helmi Ramadhan - 24120500023
+- Nicola Ardiansya Deastra - 24120400003
+
 Sebagai Admin:
 
 - [x] input barang
@@ -8,28 +15,28 @@ Sebagai Admin:
 
 Sebagai Financial Report:
 
-- [ ] Saya ingin lihat laporan:
+- [x] Saya ingin lihat laporan:
 
         _ Penjualan harian
         _ Keuntungan per item \* Barang terlaris
 
 Sebagai Kasir:
 
-- [ ] Transaction Management:
-- [ ] Saya ingin proses penjualan:
+- [x] Transaction Management:
+- [x] Saya ingin proses penjualan:
 
 _ Input kode/nama barang
 _ Input jumlah
 _ Hitung total
 _ Pilih metode bayar (cash/QRIS)
 
-- [ ] Saya ingin cetak nota:
+- [x] Saya ingin cetak nota:
       _ Nomor transaksi
       _ Detail barang \* Total bayar
-- [ ] Saya ingin cek harga barang
+- [x] Saya ingin cek harga barang
 
 Report Management:
 
-- [ ] Saya ingin buat laporan shift:
+- [x] Saya ingin buat laporan shift:
       _ Total transaksi
       _ Total pendapatan \* Detail pembayaran (cash/QRIS)
